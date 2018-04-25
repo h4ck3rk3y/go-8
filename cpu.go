@@ -17,20 +17,20 @@ type cpu struct {
 }
 
 func newCpu() cpu {
-	c := cpu{}
+	c := cpu{pc: 0x200}
 	return c
 }
 
-func (c cpu) LoadProgram(rom string) int {
+func (c *cpu) LoadProgram(rom string) int {
 	f, err := os.Open(rom)
 	if err != nil {
 		panic(err)
 	}
 	defer f.Close()
-	memory := make([]byte, 4096)
+	memory := make([]byte, 3584)
 	n, err := f.Read(memory)
 	for index, b := range memory {
-		c.memory[index] = b
+		c.memory[index+0x200] = b
 	}
 	if err != nil {
 		if err != io.EOF {
@@ -38,4 +38,21 @@ func (c cpu) LoadProgram(rom string) int {
 		}
 	}
 	return n
+}
+
+func (c *cpu) Reset() {
+	c.pc = 0x200
+	c.delayTimer = 0
+	c.soundTimer = 0
+	c.I = 0
+	c.sp = 0
+	for i := 0; i < len(c.memory); i++ {
+		c.memory[i] = 0
+	}
+	for i := 0; i < len(c.stack); i++ {
+		c.stack[i] = 0
+	}
+	for i := 0; i < len(c.V); i++ {
+		c.V[i] = 0
+	}
 }
