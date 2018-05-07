@@ -38,3 +38,9 @@ func TestReset(t *testing.T) {
 	f := newCpu()
 	assert.Equal(t, f, c, "After reset it should be same as new")
 }
+
+func TestRunCpuCycle(t *testing.T) {
+	c := newCpu()
+	c.LoadProgram("roms/PONG")
+	c.RunCpuCycle()
+}
