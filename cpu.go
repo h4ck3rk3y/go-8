@@ -60,11 +60,12 @@ func (c *cpu) Reset() {
 
 func (c *cpu) RunCpuCycle() {
 	opcode := uint16(c.memory[c.pc]<<8) | uint16(c.memory[c.pc+1])
+	c.pc = c.pc + 2
 	switch opcode & 0xF000 {
 	case 0x0000:
-		switch opcode & 0x00F0 {
+		switch opcode & 0x000F {
 		case 0x0000:
-			fmt.Println("Clear Screen Not Implemented")
+			fmt.Println("Clear Screen not implemented")
 		case 0x000E:
 			c.pc = c.stack[c.sp-1]
 			c.sp = c.sp - 1
