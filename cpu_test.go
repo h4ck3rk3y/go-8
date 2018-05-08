@@ -44,3 +44,16 @@ func TestRunCpuCycle(t *testing.T) {
 	c.LoadProgram("roms/PONG")
 	c.RunCpuCycle()
 }
+
+func TestReturnFromSubRoutine(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.stack[c.sp] = 0x30
+	c.pc = 0x200
+	c.sp = c.sp + 1
+	c.memory[0x200] = 0x00
+	c.memory[0x201] = 0xEE
+	c.RunCpuCycle()
+	assert.Equal(t, uint16(0x30), c.pc)
+	assert.Equal(t, uint16(0x00), c.sp)
+}
