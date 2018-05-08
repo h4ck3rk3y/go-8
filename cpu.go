@@ -59,7 +59,7 @@ func (c *cpu) Reset() {
 }
 
 func (c *cpu) RunCpuCycle() {
-	opcode := uint16(c.memory[c.pc]<<8) | uint16(c.memory[c.pc+1])
+	opcode := uint16(c.memory[c.pc])<<8 | uint16(c.memory[c.pc+1])
 	c.pc = c.pc + 2
 	switch opcode & 0xF000 {
 	case 0x0000:
