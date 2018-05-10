@@ -129,8 +129,8 @@ func (c *cpu) RunCpuCycle() {
 				c.V[0xF] = 0
 			}
 		case 0x0005:
-			registerX := (opcode & 0x0F00) >> 2
-			registerY := (opcode & 0x00F0) >> 1
+			registerX := (opcode & 0x0F00) >> 8
+			registerY := (opcode & 0x00F0) >> 4
 			if c.V[registerX] > c.V[registerY] {
 				c.V[0xF] = 1
 			} else {

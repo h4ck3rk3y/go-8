@@ -228,3 +228,27 @@ func TestAddVxVyOverflow(t *testing.T) {
 	assert.Equal(t, byte(0xA9), c.V[0xB])
 	assert.Equal(t, byte(0x1), c.V[0xF])
 }
+
+func TestSubVxVyNoBorrow(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.memory[0x200] = 0x87
+	c.memory[0x201] = 0x65
+	c.V[0x7] = 0x99
+	c.V[0x6] = 0x33
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x66), c.V[0x7])
+	assert.Equal(t, byte(0x1), c.V[0xF])
+}
+
+func TestSubVxVyBorrow(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.memory[0x200] = 0x87
+	c.memory[0x201] = 0x65
+	c.V[0x7] = 0x98
+	c.V[0x6] = 0xAA
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0xEE), c.V[0x7])
+	assert.Equal(t, byte(0x0), c.V[0xF])
+}
