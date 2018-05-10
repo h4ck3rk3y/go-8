@@ -73,8 +73,8 @@ func (c *cpu) RunCpuCycle() {
 	case 0x1000:
 		c.pc = opcode & 0x0FFF
 	case 0x2000:
+		c.stack[c.sp] = c.pc - 2 // Removing 2 as it's been already incremented
 		c.sp = c.sp + 1
-		c.stack[c.sp] = c.pc
 		c.pc = opcode & 0x0FFF
 	case 0x3000:
 		compareTo := byte(opcode & 0x00FF)
