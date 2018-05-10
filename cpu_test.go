@@ -298,3 +298,25 @@ func TestVySubVxBorrow(t *testing.T) {
 	assert.Equal(t, byte(0x0), c.V[0xF])
 	assert.Equal(t, byte(0xFF), c.V[0xB])
 }
+
+func TestShlVxMsbIsOne(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.memory[0x200] = 0x8A
+	c.memory[0x201] = 0xCE
+	c.V[0xA] = 0xAB
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x01), c.V[0xF])
+	assert.Equal(t, byte(0x56), c.V[0xA])
+}
+
+func TestShlVxMsbIsNotOne(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.memory[0x200] = 0x8A
+	c.memory[0x201] = 0xCE
+	c.V[0xA] = 0x3B
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x00), c.V[0xF])
+	assert.Equal(t, byte(0x76), c.V[0xA])
+}
