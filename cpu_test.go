@@ -41,7 +41,6 @@ func TestReset(t *testing.T) {
 
 func TestReturnFromSubRoutine(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.stack[c.sp] = 0x30
 	c.sp = c.sp + 1
 	c.memory[0x200] = 0x00
@@ -53,7 +52,6 @@ func TestReturnFromSubRoutine(t *testing.T) {
 
 func TestJumpToNNN(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x10
 	c.memory[0x201] = 0xFF
 	c.RunCpuCycle()
@@ -62,7 +60,6 @@ func TestJumpToNNN(t *testing.T) {
 
 func TestCallAddr(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x26
 	c.memory[0x201] = 0x93
 	c.RunCpuCycle()
@@ -73,7 +70,6 @@ func TestCallAddr(t *testing.T) {
 
 func TestSkipIfVxIsKKIsTrue(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x3B
 	c.memory[0x201] = 0x54
 	c.V[0xB] = 0x54
@@ -83,7 +79,6 @@ func TestSkipIfVxIsKKIsTrue(t *testing.T) {
 
 func TestSkipIfVxIsKKIsFalse(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x31
 	c.memory[0x201] = 0x54
 	c.V[1] = 0x95
@@ -93,7 +88,6 @@ func TestSkipIfVxIsKKIsFalse(t *testing.T) {
 
 func TestSkipIfVxIsNotKKIsTrue(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x4B
 	c.memory[0x201] = 0x54
 	c.V[0xB] = 0x54
@@ -103,7 +97,6 @@ func TestSkipIfVxIsNotKKIsTrue(t *testing.T) {
 
 func TestSkipIfVxIsNotKKIsFalse(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x41
 	c.memory[0x201] = 0x54
 	c.V[0x1] = 0x95
@@ -113,7 +106,6 @@ func TestSkipIfVxIsNotKKIsFalse(t *testing.T) {
 
 func TestSkipIfVxIsVyIsTrue(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x53
 	c.memory[0x201] = 0xB0
 	c.V[0x3] = 0x96
@@ -124,7 +116,6 @@ func TestSkipIfVxIsVyIsTrue(t *testing.T) {
 
 func TestSkipIfVxIsVyIsFalse(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x53
 	c.memory[0x201] = 0xB0
 	c.V[0x3] = 0x94
@@ -135,7 +126,6 @@ func TestSkipIfVxIsVyIsFalse(t *testing.T) {
 
 func TestSetVxToKK(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x63
 	c.memory[0x201] = 0x94
 	c.RunCpuCycle()
@@ -144,7 +134,6 @@ func TestSetVxToKK(t *testing.T) {
 
 func TestAddByteToVx(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x7C
 	c.memory[0x201] = 0xFE
 	c.V[0xC] = 0x1
@@ -154,7 +143,6 @@ func TestAddByteToVx(t *testing.T) {
 
 func TestAddByteToVxOverflow(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x7C
 	c.memory[0x201] = 0xFF
 	c.V[0xC] = 0x90
@@ -164,7 +152,6 @@ func TestAddByteToVxOverflow(t *testing.T) {
 
 func TestVxAssignVy(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x8A
 	c.memory[0x201] = 0xB0
 	c.V[0xB] = 0x90
@@ -174,7 +161,6 @@ func TestVxAssignVy(t *testing.T) {
 
 func TestVxOrVy(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x8A
 	c.memory[0x201] = 0xC1
 	c.V[0xA] = 0x11
@@ -185,7 +171,6 @@ func TestVxOrVy(t *testing.T) {
 
 func TestVxAndVy(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x8A
 	c.memory[0x201] = 0xC2
 	c.V[0xA] = 0x34
@@ -196,7 +181,6 @@ func TestVxAndVy(t *testing.T) {
 
 func TestVxXorVy(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x8A
 	c.memory[0x201] = 0xD3
 	c.V[0xA] = 0xA3
@@ -207,7 +191,6 @@ func TestVxXorVy(t *testing.T) {
 
 func TestAddVxVyNoOverflow(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x8B
 	c.memory[0x201] = 0xE4
 	c.V[0xB] = 0x11
@@ -219,7 +202,6 @@ func TestAddVxVyNoOverflow(t *testing.T) {
 
 func TestAddVxVyOverflow(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x8B
 	c.memory[0x201] = 0xF4
 	c.V[0xB] = 0xAA
@@ -231,7 +213,6 @@ func TestAddVxVyOverflow(t *testing.T) {
 
 func TestSubVxVyNoBorrow(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x87
 	c.memory[0x201] = 0x65
 	c.V[0x7] = 0x99
@@ -243,7 +224,6 @@ func TestSubVxVyNoBorrow(t *testing.T) {
 
 func TestSubVxVyBorrow(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x87
 	c.memory[0x201] = 0x65
 	c.V[0x7] = 0x98
@@ -255,7 +235,6 @@ func TestSubVxVyBorrow(t *testing.T) {
 
 func TestShrVxLsbIsOne(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x8B
 	c.memory[0x201] = 0xC6
 	c.V[0xB] = 0x99
@@ -266,7 +245,6 @@ func TestShrVxLsbIsOne(t *testing.T) {
 
 func TestShrVxLsbIsNotOne(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x8B
 	c.memory[0x201] = 0xC6
 	c.V[0xB] = 0x98
@@ -277,7 +255,6 @@ func TestShrVxLsbIsNotOne(t *testing.T) {
 
 func TestVySubVxNoBorrow(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x8B
 	c.memory[0x201] = 0xC7
 	c.V[0xB] = 0x89
@@ -289,7 +266,6 @@ func TestVySubVxNoBorrow(t *testing.T) {
 
 func TestVySubVxBorrow(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x8B
 	c.memory[0x201] = 0xC7
 	c.V[0xB] = 0x01
@@ -301,7 +277,6 @@ func TestVySubVxBorrow(t *testing.T) {
 
 func TestShlVxMsbIsOne(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x8A
 	c.memory[0x201] = 0xCE
 	c.V[0xA] = 0xAB
@@ -312,7 +287,6 @@ func TestShlVxMsbIsOne(t *testing.T) {
 
 func TestShlVxMsbIsNotOne(t *testing.T) {
 	c := newCpu()
-	c.Reset()
 	c.memory[0x200] = 0x8A
 	c.memory[0x201] = 0xCE
 	c.V[0xA] = 0x3B
