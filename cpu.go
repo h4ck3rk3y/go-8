@@ -104,8 +104,8 @@ func (c *cpu) RunCpuCycle() {
 	case 0x8000:
 		switch opcode & 0x000F {
 		case 0x0000:
-			registerX := (opcode & 0x0F00) >> 2
-			registerY := (opcode & 0x00F0) >> 1
+			registerX := (opcode & 0x0F00) >> 8
+			registerY := (opcode & 0x00F0) >> 4
 			c.V[registerX] = c.V[registerY]
 		case 0x0001:
 			registerX := (opcode & 0x0F00) >> 2
