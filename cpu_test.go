@@ -322,3 +322,12 @@ func TestLoadAddress(t *testing.T) {
 	c.RunCpuCycle()
 	assert.Equal(t, uint16(0xB34), c.I)
 }
+
+func TestJumpToLocationPlusV0(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xB1
+	c.memory[0x201] = 0x94
+	c.V[0x0] = 0x6
+	c.RunCpuCycle()
+	assert.Equal(t, uint16(0x19A), c.pc)
+}

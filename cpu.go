@@ -169,5 +169,7 @@ func (c *cpu) RunCpuCycle() {
 		}
 	case 0xA000:
 		c.I = (opcode & 0x0FFF)
+	case 0xB000:
+		c.pc = (opcode & 0x0FFF) + uint16(c.V[0x0])
 	}
 }
