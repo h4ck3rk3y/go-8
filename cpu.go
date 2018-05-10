@@ -167,5 +167,7 @@ func (c *cpu) RunCpuCycle() {
 		if c.V[registerX] != c.V[registerY] {
 			c.pc = c.pc + 2
 		}
+	case 0xA000:
+		c.I = (opcode & 0x0FFF)
 	}
 }
