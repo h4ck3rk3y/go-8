@@ -59,3 +59,14 @@ func TestJumpToNNN(t *testing.T) {
 	c.RunCpuCycle()
 	assert.Equal(t, uint16(0xFF), c.pc)
 }
+
+func TestCallAddr(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.memory[0x200] = 0x26
+	c.memory[0x201] = 0x93
+	c.RunCpuCycle()
+	assert.Equal(t, uint16(0x01), c.sp)
+	assert.Equal(t, uint16(0x200), c.stack[c.sp-1])
+	assert.Equal(t, uint16(0x693), c.pc)
+}
