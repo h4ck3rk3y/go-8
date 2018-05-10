@@ -161,3 +161,13 @@ func TestAddByteToVxOverflow(t *testing.T) {
 	c.RunCpuCycle()
 	assert.Equal(t, byte(0x8f), c.V[0xC])
 }
+
+func TestVxAssignVy(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.memory[0x200] = 0x8A
+	c.memory[0x201] = 0xB0
+	c.V[0xB] = 0x90
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x90), c.V[0xA])
+}
