@@ -2,7 +2,9 @@ package main
 
 import (
 	"io"
+	"math/rand"
 	"os"
+	"time"
 )
 
 type cpu struct {
@@ -171,5 +173,10 @@ func (c *cpu) RunCpuCycle() {
 		c.I = (opcode & 0x0FFF)
 	case 0xB000:
 		c.pc = (opcode & 0x0FFF) + uint16(c.V[0x0])
+	case 0xC000:
+		registerX := (opcode & 0x0F00) >> 8
+		value := byte(opcode & 0x00FF)
+		rand.Seed(time.Now().Unix())
+		c.V[registerX] = byte(rand.Intn(256)) + value
 	}
 }
