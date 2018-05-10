@@ -314,3 +314,11 @@ func TestSneVxVyEqual(t *testing.T) {
 	c.RunCpuCycle()
 	assert.Equal(t, uint16(0x202), c.pc)
 }
+
+func TestLoadAddress(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xAB
+	c.memory[0x201] = 0x34
+	c.RunCpuCycle()
+	assert.Equal(t, uint16(0xB34), c.I)
+}
