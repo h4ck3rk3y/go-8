@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"os"
 )
@@ -30,13 +29,13 @@ func (c *cpu) LoadProgram(rom string) int {
 	defer f.Close()
 	memory := make([]byte, 3584)
 	n, err := f.Read(memory)
-	for index, b := range memory {
-		c.memory[index+0x200] = b
-	}
 	if err != nil {
 		if err != io.EOF {
 			panic(err)
 		}
+	}
+	for index, b := range memory {
+		c.memory[index+0x200] = b
 	}
 	return n
 }
@@ -64,8 +63,7 @@ func (c *cpu) RunCpuCycle() {
 	switch opcode & 0xF000 {
 	case 0x0000:
 		switch opcode & 0x000F {
-		case 0x0000:
-			fmt.Println("Clear Screen not implemented")
+		// Implement Clear Screen
 		case 0x000E:
 			c.pc = c.stack[c.sp-1]
 			c.sp = c.sp - 1
@@ -163,7 +161,5 @@ func (c *cpu) RunCpuCycle() {
 			}
 			c.V[registerX] = c.V[registerX] << 1
 		}
-	default:
-		fmt.Println("Instruction not implemented")
 	}
 }
