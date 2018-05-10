@@ -132,3 +132,12 @@ func TestSkipIfVxIsVyIsFalse(t *testing.T) {
 	c.RunCpuCycle()
 	assert.Equal(t, uint16(0x202), c.pc)
 }
+
+func TestSetVxToKK(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.memory[0x200] = 0x63
+	c.memory[0x201] = 0x94
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x94), c.V[0x3])
+}
