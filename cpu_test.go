@@ -331,3 +331,10 @@ func TestJumpToLocationPlusV0(t *testing.T) {
 	c.RunCpuCycle()
 	assert.Equal(t, uint16(0x19A), c.pc)
 }
+
+func TestSetVxToRandomNumberAndKK(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xCA
+	c.memory[0x201] = 0xFF
+	c.RunCpuCycle()
+}
