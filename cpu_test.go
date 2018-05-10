@@ -141,3 +141,23 @@ func TestSetVxToKK(t *testing.T) {
 	c.RunCpuCycle()
 	assert.Equal(t, byte(0x94), c.V[0x3])
 }
+
+func TestAddByteToVx(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.memory[0x200] = 0x7C
+	c.memory[0x201] = 0xFE
+	c.V[0xC] = 0x1
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0xFF), c.V[0xC])
+}
+
+func TestAddByteToVxOverflow(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.memory[0x200] = 0x7C
+	c.memory[0x201] = 0xFF
+	c.V[0xC] = 0x90
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x8f), c.V[0xC])
+}
