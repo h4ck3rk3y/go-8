@@ -120,11 +120,10 @@ func (c *cpu) RunCpuCycle() {
 			registerY := (opcode & 0x00F0) >> 4
 			c.V[registerX] = c.V[registerX] ^ c.V[registerY]
 		case 0x0004:
-			registerX := byte((opcode & 0x0F00) >> 2)
-			registerY := byte((opcode & 0x00F0) >> 1)
+			registerX := byte((opcode & 0x0F00) >> 8)
+			registerY := byte((opcode & 0x00F0) >> 4)
 			c.V[registerX] = c.V[registerX] + c.V[registerY]
 			if uint16(c.V[registerX])+uint16(c.V[registerY]) > 0xFF {
-				c.V[registerX] = byte((uint16(c.V[registerX]) + uint16(c.V[registerY])) >> 0xFF)
 				c.V[0xF] = 1
 			} else {
 				c.V[0xF] = 0

@@ -204,3 +204,27 @@ func TestVxXorVy(t *testing.T) {
 	c.RunCpuCycle()
 	assert.Equal(t, byte(0x99), c.V[0xA])
 }
+
+func TestAddVxVyNoOverflow(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.memory[0x200] = 0x8B
+	c.memory[0x201] = 0xE4
+	c.V[0xB] = 0x11
+	c.V[0xE] = 0x53
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x64), c.V[0xB])
+	assert.Equal(t, byte(0x0), c.V[0xF])
+}
+
+func TestAddVxVyOverflow(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.memory[0x200] = 0x8B
+	c.memory[0x201] = 0xF4
+	c.V[0xB] = 0xAA
+	c.V[0xF] = 0xFF
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0xA9), c.V[0xB])
+	assert.Equal(t, byte(0x1), c.V[0xF])
+}
