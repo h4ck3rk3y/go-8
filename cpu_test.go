@@ -294,3 +294,23 @@ func TestShlVxMsbIsNotOne(t *testing.T) {
 	assert.Equal(t, byte(0x00), c.V[0xF])
 	assert.Equal(t, byte(0x76), c.V[0xA])
 }
+
+func TestSneVxVyNotEqual(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0x9B
+	c.memory[0x201] = 0xD0
+	c.V[0xB] = 0xDD
+	c.V[0xD] = 0xCC
+	c.RunCpuCycle()
+	assert.Equal(t, uint16(0x204), c.pc)
+}
+
+func TestSneVxVyEqual(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0x9B
+	c.memory[0x201] = 0xD0
+	c.V[0xB] = 0xDD
+	c.V[0xD] = 0xDD
+	c.RunCpuCycle()
+	assert.Equal(t, uint16(0x202), c.pc)
+}
