@@ -161,5 +161,11 @@ func (c *cpu) RunCpuCycle() {
 			}
 			c.V[registerX] = c.V[registerX] << 1
 		}
+	case 0x9000:
+		registerX := (opcode & 0x0F00) >> 8
+		registerY := (opcode & 0x00F0) >> 4
+		if c.V[registerX] != c.V[registerY] {
+			c.pc = c.pc + 2
+		}
 	}
 }
