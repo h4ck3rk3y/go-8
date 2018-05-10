@@ -98,7 +98,7 @@ func (c *cpu) RunCpuCycle() {
 		register := byte((opcode & 0x0F00) >> 8)
 		c.V[register] = byte(opcode & 0x00FF)
 	case 0x7000:
-		register := byte((opcode & 0x0F000) >> 2)
+		register := byte((opcode & 0x0F00) >> 8)
 		value := byte(opcode & 0x00FF)
 		c.V[register] = c.V[register] + value
 	case 0x8000:
