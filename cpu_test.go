@@ -193,3 +193,14 @@ func TestVxAndVy(t *testing.T) {
 	c.RunCpuCycle()
 	assert.Equal(t, byte(0x10), c.V[0xA])
 }
+
+func TestVxXorVy(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.memory[0x200] = 0x8A
+	c.memory[0x201] = 0xD3
+	c.V[0xA] = 0xA3
+	c.V[0xD] = 0x3A
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x99), c.V[0xA])
+}
