@@ -138,13 +138,13 @@ func (c *cpu) RunCpuCycle() {
 			}
 			c.V[registerX] = c.V[registerX] - c.V[registerY]
 		case 0x0006:
-			registerX := (opcode & 0x0F00) >> 2
-			c.V[registerX] = c.V[registerX] >> 1
+			registerX := (opcode & 0x0F00) >> 8
 			if c.V[registerX]&0x1 == 1 {
 				c.V[0xF] = 1
 			} else {
 				c.V[0xF] = 0
 			}
+			c.V[registerX] = c.V[registerX] >> 1
 		case 0x0007:
 			registerX := (opcode & 0x0F00) >> 2
 			registerY := (opcode & 0x00F0) >> 1
