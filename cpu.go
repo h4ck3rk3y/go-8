@@ -95,7 +95,7 @@ func (c *cpu) RunCpuCycle() {
 			c.pc = c.pc + 2
 		}
 	case 0x6000:
-		register := byte((opcode & 0x0F00) >> 2)
+		register := byte((opcode & 0x0F00) >> 8)
 		c.V[register] = byte(opcode & 0x00FF)
 	case 0x7000:
 		register := byte((opcode & 0x0F000) >> 2)
