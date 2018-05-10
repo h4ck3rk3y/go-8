@@ -84,8 +84,8 @@ func (c *cpu) RunCpuCycle() {
 		}
 	case 0x4000:
 		compareTo := byte(opcode & 0x00FF)
-		register := (opcode & 0x0F00) >> 2
-		if c.V[register] == compareTo {
+		register := (opcode & 0x0F00) >> 8
+		if c.V[register] != compareTo {
 			c.pc = c.pc + 2
 		}
 	case 0x5000:
