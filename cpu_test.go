@@ -110,3 +110,25 @@ func TestSkipIfVxIsNotKKIsFalse(t *testing.T) {
 	c.RunCpuCycle()
 	assert.Equal(t, uint16(0x204), c.pc)
 }
+
+func TestSkipIfVxIsVyIsTrue(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.memory[0x200] = 0x53
+	c.memory[0x201] = 0xB0
+	c.V[0x3] = 0x96
+	c.V[0xB] = 0x96
+	c.RunCpuCycle()
+	assert.Equal(t, uint16(0x204), c.pc)
+}
+
+func TestSkipIfVxIsVyIsFalse(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.memory[0x200] = 0x53
+	c.memory[0x201] = 0xB0
+	c.V[0x3] = 0x94
+	c.V[0xB] = 0x96
+	c.RunCpuCycle()
+	assert.Equal(t, uint16(0x202), c.pc)
+}

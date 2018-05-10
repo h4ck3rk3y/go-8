@@ -89,8 +89,8 @@ func (c *cpu) RunCpuCycle() {
 			c.pc = c.pc + 2
 		}
 	case 0x5000:
-		registerX := (opcode & 0x0F00) >> 2
-		registerY := (opcode & 0x00F0) >> 1
+		registerX := (opcode & 0x0F00) >> 8
+		registerY := (opcode & 0x00F0) >> 4
 		if c.V[registerX] == c.V[registerY] {
 			c.pc = c.pc + 2
 		}
