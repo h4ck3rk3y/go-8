@@ -70,3 +70,23 @@ func TestCallAddr(t *testing.T) {
 	assert.Equal(t, uint16(0x200), c.stack[c.sp-1])
 	assert.Equal(t, uint16(0x693), c.pc)
 }
+
+func TestSkipIfVxIsKKIsTrue(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.memory[0x200] = 0x3B
+	c.memory[0x201] = 0x54
+	c.V[0xB] = 0x54
+	c.RunCpuCycle()
+	assert.Equal(t, uint16(0x204), c.pc)
+}
+
+func TestSkipIfVxIsKKIsFalse(t *testing.T) {
+	c := newCpu()
+	c.Reset()
+	c.memory[0x200] = 0x31
+	c.memory[0x201] = 0x54
+	c.V[1] = 0x95
+	c.RunCpuCycle()
+	assert.Equal(t, uint16(0x202), c.pc)
+}
