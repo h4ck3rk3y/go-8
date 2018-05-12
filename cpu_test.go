@@ -14,7 +14,7 @@ func TestLoadProgram(t *testing.T) {
 	c := newCpu()
 	n := c.LoadProgram("roms/PONG")
 	assert.Equal(t, 246, n, "246 bytes should be read as the game is 246 bytes long")
-	for i := 0; i < 512; i++ {
+	for i := 0x50; i < 0x200; i++ {
 		assert.Equal(t, uint8(0), c.memory[i], "Should be 0 as first 512 is where emulator resides")
 	}
 }
@@ -337,4 +337,12 @@ func TestSetVxToRandomNumberAndKK(t *testing.T) {
 	c.memory[0x200] = 0xCA
 	c.memory[0x201] = 0xFF
 	c.RunCpuCycle()
+}
+
+func TestLoadFontSet(t *testing.T) {
+	c := newCpu()
+	c.LoadFontSet()
+	for i := 0x00; i < 0x50; i++ {
+		assert.Equal(t, fontset[i], c.memory[i])
+	}
 }
