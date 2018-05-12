@@ -8,14 +8,15 @@ import (
 )
 
 type cpu struct {
-	pc         uint16     // program counter
-	memory     [4096]byte // 4k memory
-	stack      [16]uint16 // 16 level stack
-	sp         uint16     // stack pointer
-	V          [16]byte   // 16 registers
-	I          uint16     // The address register
-	delayTimer uint16     // The delay timer counts down at 60hz
-	soundTimer uint16     //sound timer counts down at 60hz
+	pc         uint16       // program counter
+	memory     [4096]byte   // 4k memory
+	stack      [16]uint16   // 16 level stack
+	sp         uint16       // stack pointer
+	V          [16]byte     // 16 registers
+	I          uint16       // The address register
+	delayTimer uint16       // The delay timer counts down at 60hz
+	soundTimer uint16       //sound timer counts down at 60hz
+	display    [32][64]byte // 2d array representing 64x32 grid
 }
 
 var fontset = [...]byte{
@@ -46,6 +47,14 @@ func newCpu() cpu {
 func (c *cpu) LoadFontSet() {
 	for i := 0x00; i < 0x50; i++ {
 		c.memory[i] = fontset[i]
+	}
+}
+
+func (c *cpu) ClearDisplay() {
+	for x := 0x00; x < 0x20; x++ {
+		for y := 0x00; y < 0x40; y++ {
+			c.display[x][y] = 0x00
+		}
 	}
 }
 
@@ -84,6 +93,7 @@ func (c *cpu) Reset() {
 		c.V[i] = 0
 	}
 	c.LoadFontSet()
+	c.ClearDisplay()
 }
 
 func (c *cpu) RunCpuCycle() {
@@ -92,7 +102,8 @@ func (c *cpu) RunCpuCycle() {
 	switch opcode & 0xF000 {
 	case 0x0000:
 		switch opcode & 0x000F {
-		// Implement Clear Screen
+		case 0x0000:
+			c.ClearDisplay()
 		case 0x000E:
 			c.pc = c.stack[c.sp-1]
 			c.sp = c.sp - 1
