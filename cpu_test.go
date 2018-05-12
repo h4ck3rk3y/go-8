@@ -346,3 +346,17 @@ func TestLoadFontSet(t *testing.T) {
 		assert.Equal(t, fontset[i], c.memory[i])
 	}
 }
+
+func TestClearDisplay(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0x00
+	c.memory[0x201] = 0xE0
+	c.display[0][0] = 0x1
+	c.display[9][23] = 0x1
+	c.RunCpuCycle()
+	for x := 0x00; x < 0x20; x++ {
+		for y := 0x00; y < 0x40; y++ {
+			assert.Equal(t, byte(0), c.display[x][y])
+		}
+	}
+}
