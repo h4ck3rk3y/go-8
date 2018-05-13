@@ -461,3 +461,13 @@ func TestSetSoundTimer(t *testing.T) {
 	c.RunCpuCycle()
 	assert.Equal(t, byte(0x99), c.soundTimer)
 }
+
+func TestSetIToIPlusVx(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xFD
+	c.memory[0x201] = 0x1E
+	c.I = 0x32
+	c.V[0xD] = 0x33
+	c.RunCpuCycle()
+	assert.Equal(t, uint16(0x65), c.I)
+}
