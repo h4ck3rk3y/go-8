@@ -434,3 +434,12 @@ func TestDXYNWithWrapAroundYesCollision(t *testing.T) {
 	assert.Equal(t, byte(0x01), c.display[0][3])
 	assert.Equal(t, byte(0x01), c.display[0][63])
 }
+
+func TestSetDelayTimer(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xFD
+	c.memory[0x201] = 0x15
+	c.V[0xD] = 0x33
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x33), c.delayTimer)
+}
