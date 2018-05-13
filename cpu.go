@@ -19,8 +19,8 @@ type cpu struct {
 	sp         uint16              // stack pointer
 	V          [16]byte            // 16 registers
 	I          uint16              // The address register
-	delayTimer uint16              // The delay timer counts down at 60hz
-	soundTimer uint16              //sound timer counts down at 60hz
+	delayTimer byte                // The delay timer counts down at 60hz
+	soundTimer byte                //sound timer counts down at 60hz
 	display    [height][width]byte // 2d array representing 64x32 grid
 }
 
@@ -242,6 +242,12 @@ func (c *cpu) RunCpuCycle() {
 				}
 				c.display[yIndex][xIndex] = c.display[yIndex][xIndex] ^ bit
 			}
+		}
+	case 0xF000:
+		switch opcode & 0x00FF {
+		case 0x0015:
+			register := (opcode & 0x0F00) >> 8
+			c.delayTimer = c.V[register]
 		}
 	}
 }
