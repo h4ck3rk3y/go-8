@@ -260,6 +260,12 @@ func (c *cpu) RunCpuCycle() {
 		case 0x0029:
 			register := (opcode & 0x0F00) >> 8
 			c.I = uint16(c.V[register] * 0x5)
+		case 0x0033:
+			register := (opcode & 0x0F00) >> 8
+			number := c.V[register]
+			c.memory[c.I] = (number / 100) % 10
+			c.memory[c.I+1] = (number / 10) % 10
+			c.memory[c.I+2] = number % 10
 		}
 	}
 }

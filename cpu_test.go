@@ -480,3 +480,15 @@ func TestSetIToLocationOfDigit(t *testing.T) {
 	c.RunCpuCycle()
 	assert.Equal(t, uint16(0x23), c.I)
 }
+
+func TestSetBCDRepresentation(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xFB
+	c.memory[0x201] = 0x33
+	c.I = 0x90
+	c.V[0xB] = 0x7B
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x1), c.memory[c.I])
+	assert.Equal(t, byte(0x2), c.memory[c.I+1])
+	assert.Equal(t, byte(0x3), c.memory[c.I+2])
+}
