@@ -257,6 +257,9 @@ func (c *cpu) RunCpuCycle() {
 		case 0x001E:
 			register := (opcode & 0x0F00) >> 8
 			c.I = c.I + uint16(c.V[register])
+		case 0x0029:
+			register := (opcode & 0x0F00) >> 8
+			c.I = uint16(c.V[register] * 0x5)
 		}
 	}
 }
