@@ -508,3 +508,17 @@ func TestLoadRegisterToMemory(t *testing.T) {
 	assert.Equal(t, byte(0x42), c.memory[c.I+2])
 	assert.Equal(t, byte(0x2A), c.memory[c.I+3])
 }
+
+func TestLoadMemoryToRegisters(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xF2
+	c.memory[0x201] = 0x65
+	c.I = 0x90
+	c.memory[c.I] = 0xff
+	c.memory[c.I+1] = 0x42
+	c.memory[c.I+2] = 0x34
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0xff), c.V[0x00])
+	assert.Equal(t, byte(0x42), c.V[0x01])
+	assert.Equal(t, byte(0x34), c.V[0x02])
+}
