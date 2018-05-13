@@ -471,3 +471,12 @@ func TestSetIToIPlusVx(t *testing.T) {
 	c.RunCpuCycle()
 	assert.Equal(t, uint16(0x65), c.I)
 }
+
+func TestSetIToLocationOfDigit(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xFD
+	c.memory[0x201] = 0x29
+	c.V[0xD] = 0x7
+	c.RunCpuCycle()
+	assert.Equal(t, uint16(0x23), c.I)
+}
