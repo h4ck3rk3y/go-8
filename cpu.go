@@ -7,16 +7,21 @@ import (
 	"time"
 )
 
+const (
+	height = byte(0x20)
+	width  = byte(0x40)
+)
+
 type cpu struct {
-	pc         uint16       // program counter
-	memory     [4096]byte   // 4k memory
-	stack      [16]uint16   // 16 level stack
-	sp         uint16       // stack pointer
-	V          [16]byte     // 16 registers
-	I          uint16       // The address register
-	delayTimer uint16       // The delay timer counts down at 60hz
-	soundTimer uint16       //sound timer counts down at 60hz
-	display    [32][64]byte // 2d array representing 64x32 grid
+	pc         uint16              // program counter
+	memory     [4096]byte          // 4k memory
+	stack      [16]uint16          // 16 level stack
+	sp         uint16              // stack pointer
+	V          [16]byte            // 16 registers
+	I          uint16              // The address register
+	delayTimer uint16              // The delay timer counts down at 60hz
+	soundTimer uint16              //sound timer counts down at 60hz
+	display    [height][width]byte // 2d array representing 64x32 grid
 }
 
 var fontset = [...]byte{
@@ -216,5 +221,27 @@ func (c *cpu) RunCpuCycle() {
 		value := byte(opcode & 0x00FF)
 		rand.Seed(time.Now().Unix())
 		c.V[registerX] = byte(rand.Intn(256)) + value
+	case 0xD000:
+		registerX := (opcode & 0x0F00) >> 8
+		registerY := (opcode & 0x00F0) >> 4
+		nibble := byte(opcode & 0x000F)
+		x := c.V[registerX]
+		y := c.V[registerY]
+		for i := y; i < y+nibble; i++ {
+			for j := x; j < x+8; j++ {
+				bit := (c.memory[c.I+uint16(i-y)] >> (7 - j + x)) & 0x01
+				xIndex, yIndex := j, i
+				if j >= width {
+					xIndex = j - width
+				}
+				if i >= height {
+					yIndex = i - height
+				}
+				if bit == 0x01 && c.display[yIndex][xIndex] == 0x01 {
+					c.V[0xF] = 0x01
+				}
+				c.display[yIndex][xIndex] = c.display[yIndex][xIndex] ^ bit
+			}
+		}
 	}
 }
