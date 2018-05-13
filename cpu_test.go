@@ -360,3 +360,77 @@ func TestClearDisplay(t *testing.T) {
 		}
 	}
 }
+
+func TestDXYNNoWrapAroundNoCollision(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xD3
+	c.memory[0x201] = 0xD2
+	c.I = 0x300
+	c.V[0x3] = 0
+	c.V[0xD] = 0
+	c.memory[0x300] = 0x11
+	c.memory[0x301] = 0x88
+	c.ClearDisplay()
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x00), c.V[0xF])
+	assert.Equal(t, byte(0x01), c.display[0][3])
+	assert.Equal(t, byte(0x01), c.display[0][7])
+	assert.Equal(t, byte(0x01), c.display[1][0])
+	assert.Equal(t, byte(0x01), c.display[1][4])
+}
+
+func TestDXYNNoWrapAroundYesCollision(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xD3
+	c.memory[0x201] = 0xD2
+	c.I = 0x300
+	c.memory[0x300] = 0x11
+	c.memory[0x301] = 0x88
+	c.V[0x3] = 0
+	c.V[0xD] = 0
+	c.ClearDisplay()
+	c.display[0][3] = 0x01
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x01), c.V[0xF])
+	assert.Equal(t, byte(0x00), c.display[0][3])
+	assert.Equal(t, byte(0x01), c.display[0][7])
+	assert.Equal(t, byte(0x01), c.display[1][0])
+	assert.Equal(t, byte(0x01), c.display[1][4])
+}
+
+func TestDXYNWithWrapAroundNoCollision(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xD3
+	c.memory[0x201] = 0xD2
+	c.I = 0x300
+	c.memory[0x300] = 0x11
+	c.memory[0x301] = 0x88
+	c.V[0x3] = 0x3F
+	c.V[0xD] = 0x1F
+	c.ClearDisplay()
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x00), c.V[0xF])
+	assert.Equal(t, byte(0x01), c.display[31][2])
+	assert.Equal(t, byte(0x01), c.display[31][6])
+	assert.Equal(t, byte(0x01), c.display[0][3])
+	assert.Equal(t, byte(0x01), c.display[0][63])
+}
+
+func TestDXYNWithWrapAroundYesCollision(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xD3
+	c.memory[0x201] = 0xD2
+	c.I = 0x300
+	c.memory[0x300] = 0x11
+	c.memory[0x301] = 0x88
+	c.V[0x3] = 0x3F
+	c.V[0xD] = 0x1F
+	c.ClearDisplay()
+	c.display[31][2] = 0x01
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x01), c.V[0xF])
+	assert.Equal(t, byte(0x00), c.display[31][2])
+	assert.Equal(t, byte(0x01), c.display[31][6])
+	assert.Equal(t, byte(0x01), c.display[0][3])
+	assert.Equal(t, byte(0x01), c.display[0][63])
+}
