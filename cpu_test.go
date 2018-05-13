@@ -492,3 +492,19 @@ func TestSetBCDRepresentation(t *testing.T) {
 	assert.Equal(t, byte(0x2), c.memory[c.I+1])
 	assert.Equal(t, byte(0x3), c.memory[c.I+2])
 }
+
+func TestLoadRegisterToMemory(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xF3
+	c.memory[0x201] = 0x55
+	c.I = 0x90
+	c.V[0x0] = 0x55
+	c.V[0x1] = 0x93
+	c.V[0x2] = 0x42
+	c.V[0x3] = 0x2A
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x55), c.memory[c.I])
+	assert.Equal(t, byte(0x93), c.memory[c.I+1])
+	assert.Equal(t, byte(0x42), c.memory[c.I+2])
+	assert.Equal(t, byte(0x2A), c.memory[c.I+3])
+}
