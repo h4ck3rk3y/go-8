@@ -266,6 +266,11 @@ func (c *cpu) RunCpuCycle() {
 			c.memory[c.I] = (number / 100) % 10
 			c.memory[c.I+1] = (number / 10) % 10
 			c.memory[c.I+2] = number % 10
+		case 0x0055:
+			register := (opcode & 0x0F00) >> 8
+			for i := uint16(0x00); i <= register; i++ {
+				c.memory[c.I+i] = c.V[i]
+			}
 		}
 	}
 }
