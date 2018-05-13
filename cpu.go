@@ -245,6 +245,9 @@ func (c *cpu) RunCpuCycle() {
 		}
 	case 0xF000:
 		switch opcode & 0x00FF {
+		case 0x007:
+			register := (opcode & 0x0F00) >> 8
+			c.V[register] = c.delayTimer
 		case 0x0015:
 			register := (opcode & 0x0F00) >> 8
 			c.delayTimer = c.V[register]

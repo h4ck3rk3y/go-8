@@ -443,3 +443,12 @@ func TestSetDelayTimer(t *testing.T) {
 	c.RunCpuCycle()
 	assert.Equal(t, byte(0x33), c.delayTimer)
 }
+
+func TestSetVxToDelayTimer(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xFD
+	c.memory[0x201] = 0x07
+	c.delayTimer = 0x44
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x44), c.V[0xD])
+}
