@@ -251,6 +251,9 @@ func (c *cpu) RunCpuCycle() {
 		case 0x0015:
 			register := (opcode & 0x0F00) >> 8
 			c.delayTimer = c.V[register]
+		case 0x0018:
+			register := (opcode & 0x0F00) >> 8
+			c.soundTimer = c.V[register]
 		}
 	}
 }

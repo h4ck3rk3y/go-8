@@ -452,3 +452,12 @@ func TestSetVxToDelayTimer(t *testing.T) {
 	c.RunCpuCycle()
 	assert.Equal(t, byte(0x44), c.V[0xD])
 }
+
+func TestSetSoundTimer(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xFD
+	c.memory[0x201] = 0x18
+	c.V[0xD] = 0x99
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x99), c.soundTimer)
+}
