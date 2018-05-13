@@ -271,6 +271,11 @@ func (c *cpu) RunCpuCycle() {
 			for i := uint16(0x00); i <= register; i++ {
 				c.memory[c.I+i] = c.V[i]
 			}
+		case 0x0065:
+			register := (opcode & 0x0F00) >> 8
+			for i := uint16(0x00); i <= register; i++ {
+				c.V[i] = c.memory[c.I+i]
+			}
 		}
 	}
 }
