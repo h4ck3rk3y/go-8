@@ -522,3 +522,22 @@ func TestLoadMemoryToRegisters(t *testing.T) {
 	assert.Equal(t, byte(0x42), c.V[0x01])
 	assert.Equal(t, byte(0x34), c.V[0x02])
 }
+
+func TestSkipIfVxIsPressedIsTrue(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xED
+	c.memory[0x201] = 0x9E
+	c.V[0xD] = 0xD
+	c.keys[0xD] = 0x01
+	c.RunCpuCycle()
+	assert.Equal(t, uint16(0x204), c.pc)
+}
+
+func TestSkipIfVxIsPressedIsFalse(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xED
+	c.memory[0x201] = 0x9E
+	c.V[0xD] = 0xD
+	c.RunCpuCycle()
+	assert.Equal(t, uint16(0x202), c.pc)
+}

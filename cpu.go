@@ -22,6 +22,7 @@ type cpu struct {
 	delayTimer byte                // The delay timer counts down at 60hz
 	soundTimer byte                //sound timer counts down at 60hz
 	display    [height][width]byte // 2d array representing 64x32 grid
+	keys       [16]byte            // state of the keys
 }
 
 var fontset = [...]byte{
@@ -96,6 +97,9 @@ func (c *cpu) Reset() {
 	}
 	for i := 0; i < len(c.V); i++ {
 		c.V[i] = 0
+	}
+	for i := 0; i < len(c.keys); i++ {
+		c.keys[i] = 0
 	}
 	c.LoadFontSet()
 	c.ClearDisplay()
@@ -242,6 +246,14 @@ func (c *cpu) RunCpuCycle() {
 					c.V[0xF] = 0x01
 				}
 				c.display[yIndex][xIndex] = c.display[yIndex][xIndex] ^ bit
+			}
+		}
+	case 0xE000:
+		switch opcode & 0x00FF {
+		case 0x009E:
+			register := (opcode & 0x0F00) >> 8
+			if c.keys[c.V[register]] == 0x01 {
+				c.pc = c.pc + 2
 			}
 		}
 	case 0xF000:
