@@ -255,6 +255,11 @@ func (c *cpu) RunCpuCycle() {
 			if c.keys[c.V[register]] == 0x01 {
 				c.pc = c.pc + 2
 			}
+		case 0x00A1:
+			register := (opcode & 0x0F00) >> 8
+			if c.keys[c.V[register]] == 0x00 {
+				c.pc = c.pc + 2
+			}
 		}
 	case 0xF000:
 		switch opcode & 0x00FF {

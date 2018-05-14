@@ -541,3 +541,23 @@ func TestSkipIfVxIsPressedIsFalse(t *testing.T) {
 	c.RunCpuCycle()
 	assert.Equal(t, uint16(0x202), c.pc)
 }
+
+func TestSkipifVxIsNotPressedIsTrue(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xEB
+	c.memory[0x201] = 0xA1
+	c.V[0xB] = 0xA
+	c.keys[0xA] = 0x00
+	c.RunCpuCycle()
+	assert.Equal(t, uint16(0x204), c.pc)
+}
+
+func TestSkipifVxIsNotPressedIsFalse(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xEB
+	c.memory[0x201] = 0xA1
+	c.V[0xB] = 0xA
+	c.keys[0xA] = 0x01
+	c.RunCpuCycle()
+	assert.Equal(t, uint16(0x202), c.pc)
+}
