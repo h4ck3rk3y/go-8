@@ -227,6 +227,7 @@ func (c *cpu) RunCpuCycle() {
 		nibble := byte(opcode & 0x000F)
 		x := c.V[registerX]
 		y := c.V[registerY]
+		c.V[0xF] = 0x00
 		for i := y; i < y+nibble; i++ {
 			for j := x; j < x+8; j++ {
 				bit := (c.memory[c.I+uint16(i-y)] >> (7 - j + x)) & 0x01
