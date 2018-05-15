@@ -105,6 +105,18 @@ func (c *cpu) Reset() {
 	c.ClearDisplay()
 }
 
+func (c *cpu) Run() {
+	c.RunCpuCycle()
+
+	if c.delayTimer > 0 {
+		c.delayTimer = c.delayTimer - 1
+	}
+
+	if c.soundTimer > 0 {
+		c.soundTimer = c.soundTimer - 1
+	}
+}
+
 func (c *cpu) RunCpuCycle() {
 	opcode := uint16(c.memory[c.pc])<<8 | uint16(c.memory[c.pc+1])
 	c.pc = c.pc + 2
