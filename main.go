@@ -2,6 +2,9 @@ package main
 
 import (
 	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/audio"
+	"github.com/hajimehoshi/ebiten/audio/mp3"
+	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"image/color"
 )
 
@@ -10,6 +13,8 @@ var (
 )
 
 var keyMap map[ebiten.Key]byte
+
+var audioPlayer *audio.Player
 
 func setupKeys() {
 	keyMap = make(map[ebiten.Key]byte)
@@ -63,10 +68,19 @@ func update(screen *ebiten.Image) error {
 		}
 	}
 
+	if chip8.soundTimer > 0 {
+		audioPlayer.Play()
+		audioPlayer.Rewind()
+	}
+
 	return nil
 }
 
 func main() {
+	audioContext, _ := audio.NewContext(48000)
+	f, _ := ebitenutil.OpenFile("beep.mp3")
+	d, _ := mp3.Decode(audioContext, f)
+	audioPlayer, _ = audio.NewPlayer(audioContext, d)
 	setupKeys()
 	chip8 = newCpu()
 	chip8.LoadProgram("roms/PONG")
