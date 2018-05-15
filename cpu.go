@@ -224,7 +224,7 @@ func (c *cpu) RunCpuCycle() {
 		registerX := (opcode & 0x0F00) >> 8
 		value := byte(opcode & 0x00FF)
 		rand.Seed(time.Now().Unix())
-		c.V[registerX] = byte(rand.Intn(256)) + value
+		c.V[registerX] = byte(rand.Intn(256)) & value
 	case 0xD000:
 		registerX := (opcode & 0x0F00) >> 8
 		registerY := (opcode & 0x00F0) >> 4
