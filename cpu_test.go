@@ -333,6 +333,8 @@ func TestJumpToLocationPlusV0(t *testing.T) {
 }
 
 func TestSetVxToRandomNumberAndKK(t *testing.T) {
+	// This isn't really tested
+	// Caused bug
 	c := newCpu()
 	c.memory[0x200] = 0xCA
 	c.memory[0x201] = 0xFF
