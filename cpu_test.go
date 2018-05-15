@@ -64,7 +64,7 @@ func TestCallAddr(t *testing.T) {
 	c.memory[0x201] = 0x93
 	c.RunCpuCycle()
 	assert.Equal(t, uint16(0x01), c.sp)
-	assert.Equal(t, uint16(0x200), c.stack[c.sp-1])
+	assert.Equal(t, uint16(0x202), c.stack[c.sp-1])
 	assert.Equal(t, uint16(0x693), c.pc)
 }
 
