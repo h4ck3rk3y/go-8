@@ -6,12 +6,12 @@ import (
 )
 
 func TestNewCpu(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	assert.NotNil(t, c)
 }
 
 func TestLoadProgram(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	n := c.LoadProgram("roms/PONG")
 	assert.Equal(t, 246, n, "246 bytes should be read as the game is 246 bytes long")
 	for i := 0x50; i < 0x200; i++ {
@@ -26,21 +26,21 @@ func TestLoadProgramFailsWithWrongFile(t *testing.T) {
 		}
 	}()
 
-	c := newCpu()
+	c := NewCpu()
 	c.LoadProgram("roms/FOO")
 }
 
 func TestReset(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.LoadProgram("roms/PONG")
 	c.I = 42
 	c.Reset()
-	f := newCpu()
+	f := NewCpu()
 	assert.Equal(t, f, c, "After reset it should be same as new")
 }
 
 func TestReturnFromSubRoutine(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.stack[c.sp] = 0x30
 	c.sp = c.sp + 1
 	c.memory[0x200] = 0x00
@@ -51,7 +51,7 @@ func TestReturnFromSubRoutine(t *testing.T) {
 }
 
 func TestJumpToNNN(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x10
 	c.memory[0x201] = 0xFF
 	c.RunCpuCycle()
@@ -59,7 +59,7 @@ func TestJumpToNNN(t *testing.T) {
 }
 
 func TestCallAddr(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x26
 	c.memory[0x201] = 0x93
 	c.RunCpuCycle()
@@ -69,7 +69,7 @@ func TestCallAddr(t *testing.T) {
 }
 
 func TestSkipIfVxIsKKIsTrue(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x3B
 	c.memory[0x201] = 0x54
 	c.V[0xB] = 0x54
@@ -78,7 +78,7 @@ func TestSkipIfVxIsKKIsTrue(t *testing.T) {
 }
 
 func TestSkipIfVxIsKKIsFalse(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x31
 	c.memory[0x201] = 0x54
 	c.V[1] = 0x95
@@ -87,7 +87,7 @@ func TestSkipIfVxIsKKIsFalse(t *testing.T) {
 }
 
 func TestSkipIfVxIsNotKKIsTrue(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x4B
 	c.memory[0x201] = 0x54
 	c.V[0xB] = 0x54
@@ -96,7 +96,7 @@ func TestSkipIfVxIsNotKKIsTrue(t *testing.T) {
 }
 
 func TestSkipIfVxIsNotKKIsFalse(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x41
 	c.memory[0x201] = 0x54
 	c.V[0x1] = 0x95
@@ -105,7 +105,7 @@ func TestSkipIfVxIsNotKKIsFalse(t *testing.T) {
 }
 
 func TestSkipIfVxIsVyIsTrue(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x53
 	c.memory[0x201] = 0xB0
 	c.V[0x3] = 0x96
@@ -115,7 +115,7 @@ func TestSkipIfVxIsVyIsTrue(t *testing.T) {
 }
 
 func TestSkipIfVxIsVyIsFalse(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x53
 	c.memory[0x201] = 0xB0
 	c.V[0x3] = 0x94
@@ -125,7 +125,7 @@ func TestSkipIfVxIsVyIsFalse(t *testing.T) {
 }
 
 func TestSetVxToKK(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x63
 	c.memory[0x201] = 0x94
 	c.RunCpuCycle()
@@ -133,7 +133,7 @@ func TestSetVxToKK(t *testing.T) {
 }
 
 func TestAddByteToVx(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x7C
 	c.memory[0x201] = 0xFE
 	c.V[0xC] = 0x1
@@ -142,7 +142,7 @@ func TestAddByteToVx(t *testing.T) {
 }
 
 func TestAddByteToVxOverflow(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x7C
 	c.memory[0x201] = 0xFF
 	c.V[0xC] = 0x90
@@ -151,7 +151,7 @@ func TestAddByteToVxOverflow(t *testing.T) {
 }
 
 func TestVxAssignVy(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x8A
 	c.memory[0x201] = 0xB0
 	c.V[0xB] = 0x90
@@ -160,7 +160,7 @@ func TestVxAssignVy(t *testing.T) {
 }
 
 func TestVxOrVy(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x8A
 	c.memory[0x201] = 0xC1
 	c.V[0xA] = 0x11
@@ -170,7 +170,7 @@ func TestVxOrVy(t *testing.T) {
 }
 
 func TestVxAndVy(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x8A
 	c.memory[0x201] = 0xC2
 	c.V[0xA] = 0x34
@@ -180,7 +180,7 @@ func TestVxAndVy(t *testing.T) {
 }
 
 func TestVxXorVy(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x8A
 	c.memory[0x201] = 0xD3
 	c.V[0xA] = 0xA3
@@ -190,7 +190,7 @@ func TestVxXorVy(t *testing.T) {
 }
 
 func TestAddVxVyNoOverflow(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x8B
 	c.memory[0x201] = 0xE4
 	c.V[0xB] = 0x11
@@ -201,7 +201,7 @@ func TestAddVxVyNoOverflow(t *testing.T) {
 }
 
 func TestAddVxVyOverflow(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x8B
 	c.memory[0x201] = 0xF4
 	c.V[0xB] = 0xAA
@@ -212,7 +212,7 @@ func TestAddVxVyOverflow(t *testing.T) {
 }
 
 func TestSubVxVyNoBorrow(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x87
 	c.memory[0x201] = 0x65
 	c.V[0x7] = 0x99
@@ -223,7 +223,7 @@ func TestSubVxVyNoBorrow(t *testing.T) {
 }
 
 func TestSubVxVyBorrow(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x87
 	c.memory[0x201] = 0x65
 	c.V[0x7] = 0x98
@@ -234,7 +234,7 @@ func TestSubVxVyBorrow(t *testing.T) {
 }
 
 func TestShrVxLsbIsOne(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x8B
 	c.memory[0x201] = 0xC6
 	c.V[0xB] = 0x99
@@ -244,7 +244,7 @@ func TestShrVxLsbIsOne(t *testing.T) {
 }
 
 func TestShrVxLsbIsNotOne(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x8B
 	c.memory[0x201] = 0xC6
 	c.V[0xB] = 0x98
@@ -254,7 +254,7 @@ func TestShrVxLsbIsNotOne(t *testing.T) {
 }
 
 func TestVySubVxNoBorrow(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x8B
 	c.memory[0x201] = 0xC7
 	c.V[0xB] = 0x89
@@ -265,7 +265,7 @@ func TestVySubVxNoBorrow(t *testing.T) {
 }
 
 func TestVySubVxBorrow(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x8B
 	c.memory[0x201] = 0xC7
 	c.V[0xB] = 0x01
@@ -276,7 +276,7 @@ func TestVySubVxBorrow(t *testing.T) {
 }
 
 func TestShlVxMsbIsOne(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x8A
 	c.memory[0x201] = 0xCE
 	c.V[0xA] = 0xAB
@@ -286,7 +286,7 @@ func TestShlVxMsbIsOne(t *testing.T) {
 }
 
 func TestShlVxMsbIsNotOne(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x8A
 	c.memory[0x201] = 0xCE
 	c.V[0xA] = 0x3B
@@ -296,7 +296,7 @@ func TestShlVxMsbIsNotOne(t *testing.T) {
 }
 
 func TestSneVxVyNotEqual(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x9B
 	c.memory[0x201] = 0xD0
 	c.V[0xB] = 0xDD
@@ -306,7 +306,7 @@ func TestSneVxVyNotEqual(t *testing.T) {
 }
 
 func TestSneVxVyEqual(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x9B
 	c.memory[0x201] = 0xD0
 	c.V[0xB] = 0xDD
@@ -316,7 +316,7 @@ func TestSneVxVyEqual(t *testing.T) {
 }
 
 func TestLoadAddress(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xAB
 	c.memory[0x201] = 0x34
 	c.RunCpuCycle()
@@ -324,7 +324,7 @@ func TestLoadAddress(t *testing.T) {
 }
 
 func TestJumpToLocationPlusV0(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xB1
 	c.memory[0x201] = 0x94
 	c.V[0x0] = 0x6
@@ -335,14 +335,14 @@ func TestJumpToLocationPlusV0(t *testing.T) {
 func TestSetVxToRandomNumberAndKK(t *testing.T) {
 	// This isn't really tested
 	// Caused bug
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xCA
 	c.memory[0x201] = 0xFF
 	c.RunCpuCycle()
 }
 
 func TestLoadFontSet(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.LoadFontSet()
 	for i := 0x00; i < 0x50; i++ {
 		assert.Equal(t, fontset[i], c.memory[i])
@@ -350,7 +350,7 @@ func TestLoadFontSet(t *testing.T) {
 }
 
 func TestClearDisplay(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0x00
 	c.memory[0x201] = 0xE0
 	c.display[0][0] = 0x1
@@ -364,7 +364,7 @@ func TestClearDisplay(t *testing.T) {
 }
 
 func TestDXYNNoWrapAroundNoCollision(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xD3
 	c.memory[0x201] = 0xD2
 	c.I = 0x300
@@ -382,7 +382,7 @@ func TestDXYNNoWrapAroundNoCollision(t *testing.T) {
 }
 
 func TestDXYNNoWrapAroundYesCollision(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xD3
 	c.memory[0x201] = 0xD2
 	c.I = 0x300
@@ -401,7 +401,7 @@ func TestDXYNNoWrapAroundYesCollision(t *testing.T) {
 }
 
 func TestDXYNWithWrapAroundNoCollision(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xD3
 	c.memory[0x201] = 0xD2
 	c.I = 0x300
@@ -419,7 +419,7 @@ func TestDXYNWithWrapAroundNoCollision(t *testing.T) {
 }
 
 func TestDXYNWithWrapAroundYesCollision(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xD3
 	c.memory[0x201] = 0xD2
 	c.I = 0x300
@@ -438,7 +438,7 @@ func TestDXYNWithWrapAroundYesCollision(t *testing.T) {
 }
 
 func TestSetDelayTimer(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xFD
 	c.memory[0x201] = 0x15
 	c.V[0xD] = 0x33
@@ -447,7 +447,7 @@ func TestSetDelayTimer(t *testing.T) {
 }
 
 func TestSetVxToDelayTimer(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xFD
 	c.memory[0x201] = 0x07
 	c.delayTimer = 0x44
@@ -456,7 +456,7 @@ func TestSetVxToDelayTimer(t *testing.T) {
 }
 
 func TestSetSoundTimer(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xFD
 	c.memory[0x201] = 0x18
 	c.V[0xD] = 0x99
@@ -465,7 +465,7 @@ func TestSetSoundTimer(t *testing.T) {
 }
 
 func TestSetIToIPlusVx(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xFD
 	c.memory[0x201] = 0x1E
 	c.I = 0x32
@@ -475,7 +475,7 @@ func TestSetIToIPlusVx(t *testing.T) {
 }
 
 func TestSetIToLocationOfDigit(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xFD
 	c.memory[0x201] = 0x29
 	c.V[0xD] = 0x7
@@ -484,7 +484,7 @@ func TestSetIToLocationOfDigit(t *testing.T) {
 }
 
 func TestSetBCDRepresentation(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xFB
 	c.memory[0x201] = 0x33
 	c.I = 0x90
@@ -496,7 +496,7 @@ func TestSetBCDRepresentation(t *testing.T) {
 }
 
 func TestLoadRegisterToMemory(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xF3
 	c.memory[0x201] = 0x55
 	c.I = 0x90
@@ -512,7 +512,7 @@ func TestLoadRegisterToMemory(t *testing.T) {
 }
 
 func TestLoadMemoryToRegisters(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xF2
 	c.memory[0x201] = 0x65
 	c.I = 0x90
@@ -526,7 +526,7 @@ func TestLoadMemoryToRegisters(t *testing.T) {
 }
 
 func TestSkipIfVxIsPressedIsTrue(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xED
 	c.memory[0x201] = 0x9E
 	c.V[0xD] = 0xD
@@ -536,7 +536,7 @@ func TestSkipIfVxIsPressedIsTrue(t *testing.T) {
 }
 
 func TestSkipIfVxIsPressedIsFalse(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xED
 	c.memory[0x201] = 0x9E
 	c.V[0xD] = 0xD
@@ -545,7 +545,7 @@ func TestSkipIfVxIsPressedIsFalse(t *testing.T) {
 }
 
 func TestSkipifVxIsNotPressedIsTrue(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xEB
 	c.memory[0x201] = 0xA1
 	c.V[0xB] = 0xA
@@ -555,7 +555,7 @@ func TestSkipifVxIsNotPressedIsTrue(t *testing.T) {
 }
 
 func TestSkipifVxIsNotPressedIsFalse(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xEB
 	c.memory[0x201] = 0xA1
 	c.V[0xB] = 0xA
@@ -565,7 +565,7 @@ func TestSkipifVxIsNotPressedIsFalse(t *testing.T) {
 }
 
 func TestRunFunc(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xEB
 	c.memory[0x201] = 0xA1
 	c.V[0xB] = 0xA
@@ -579,7 +579,7 @@ func TestRunFunc(t *testing.T) {
 }
 
 func TestWaitTillKeyPressed(t *testing.T) {
-	c := newCpu()
+	c := NewCpu()
 	c.memory[0x200] = 0xFA
 	c.memory[0x201] = 0x0A
 	c.RunCpuCycle()

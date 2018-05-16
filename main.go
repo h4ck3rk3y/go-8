@@ -101,7 +101,7 @@ func main() {
 	d, _ := mp3.Decode(audioContext, f)
 	audioPlayer, _ = audio.NewPlayer(audioContext, d)
 	setupKeys()
-	chip8 = newCpu()
+	chip8 = NewCpu()
 	chip8.LoadProgram("roms/PONG")
 	if err := ebiten.Run(update, 640, 320, 1, "PONG"); err != nil {
 		panic(err)

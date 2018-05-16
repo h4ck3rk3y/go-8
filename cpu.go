@@ -47,7 +47,7 @@ var fontset = [...]byte{
 	0xF0, 0x80, 0xF0, 0x80, 0x80, // F
 }
 
-func newCpu() cpu {
+func NewCpu() cpu {
 	c := cpu{pc: 0x200}
 	c.LoadFontSet()
 	return c
