@@ -13,17 +13,19 @@ const (
 )
 
 type cpu struct {
-	pc         uint16              // program counter
-	memory     [4096]byte          // 4k memory
-	stack      [16]uint16          // 16 level stack
-	sp         uint16              // stack pointer
-	V          [16]byte            // 16 registers
-	I          uint16              // The address register
-	delayTimer byte                // The delay timer counts down at 60hz
-	soundTimer byte                //sound timer counts down at 60hz
-	display    [height][width]byte // 2d array representing 64x32 grid
-	keys       [16]byte            // state of the keys
-	draw       bool                // to draw or not
+	pc            uint16              // program counter
+	memory        [4096]byte          // 4k memory
+	stack         [16]uint16          // 16 level stack
+	sp            uint16              // stack pointer
+	V             [16]byte            // 16 registers
+	I             uint16              // The address register
+	delayTimer    byte                // The delay timer counts down at 60hz
+	soundTimer    byte                //sound timer counts down at 60hz
+	display       [height][width]byte // 2d array representing 64x32 grid
+	keys          [16]byte            // state of the keys
+	draw          bool                // to draw or not
+	inputflag     bool                // stop everything wait for input
+	inputRegister byte                // Stre value of input
 }
 
 var fontset = [...]byte{
@@ -286,6 +288,10 @@ func (c *cpu) RunCpuCycle() {
 		case 0x0018:
 			register := (opcode & 0x0F00) >> 8
 			c.soundTimer = c.V[register]
+		case 0x000A:
+			register := (opcode & 0x0F00) >> 8
+			c.inputflag = true
+			c.inputRegister = byte(register)
 		case 0x001E:
 			register := (opcode & 0x0F00) >> 8
 			c.I = c.I + uint16(c.V[register])

@@ -577,3 +577,12 @@ func TestRunFunc(t *testing.T) {
 	assert.Equal(t, byte(54), c.delayTimer)
 	assert.Equal(t, byte(1), c.soundTimer)
 }
+
+func TestWaitTillKeyPressed(t *testing.T) {
+	c := newCpu()
+	c.memory[0x200] = 0xFA
+	c.memory[0x201] = 0x0A
+	c.RunCpuCycle()
+	assert.Equal(t, byte(0x0A), c.inputRegister)
+	assert.Equal(t, true, c.inputflag)
+}

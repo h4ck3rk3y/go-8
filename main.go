@@ -44,7 +44,20 @@ func update(screen *ebiten.Image) error {
 	for i := 0; i < 10; i++ {
 
 		chip8.draw = false
+		chip8.inputflag = false
 		chip8.Run()
+
+		if chip8.inputflag {
+		InputLoop:
+			for true {
+				for key, value := range keyMap {
+					if ebiten.IsKeyPressed(key) {
+						chip8.V[chip8.inputRegister] = value
+						break InputLoop
+					}
+				}
+			}
+		}
 
 		if chip8.draw {
 			for i := 0; i < 32; i++ {
