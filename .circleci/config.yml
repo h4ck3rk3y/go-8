@@ -2,12 +2,13 @@
 #
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2
+
 jobs:
   build:
     docker:
       # specify the version
       - image: circleci/golang:1.9
-      
+
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -16,7 +17,9 @@ jobs:
     working_directory: /go/src/github.com/h4ck3rk3y/go-8
     steps:
       - checkout
-
+      - run: sudo apt-get update
+      - run: sudo apt install libglu1-mesa-dev libgles2-mesa-dev libxrandr-dev libxcursor-dev libxinerama-dev libxi-dev libasound2-dev
       # specify any bash command here prefixed with `run: `
       - run: go get -v -t -d ./...
-      - run: go test -v --cover ./...
+      - run: go test cpu_test.go cpu.go -v --cover
+      - run: go build main.go cpu.go
