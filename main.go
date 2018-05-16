@@ -84,7 +84,7 @@ func update(screen *ebiten.Image) error {
 
 func main() {
 	audioContext, _ := audio.NewContext(48000)
-	f, _ := ebitenutil.OpenFile("beep.mp3")
+	f, _ := ebitenutil.OpenFile("assets/beep.mp3")
 	d, _ := mp3.Decode(audioContext, f)
 	audioPlayer, _ = audio.NewPlayer(audioContext, d)
 	setupKeys()
