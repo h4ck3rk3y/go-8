@@ -23,6 +23,7 @@ type cpu struct {
 	soundTimer byte                //sound timer counts down at 60hz
 	display    [height][width]byte // 2d array representing 64x32 grid
 	keys       [16]byte            // state of the keys
+	draw       bool                // to draw or not
 }
 
 var fontset = [...]byte{
@@ -260,6 +261,7 @@ func (c *cpu) RunCpuCycle() {
 				c.display[yIndex][xIndex] = c.display[yIndex][xIndex] ^ bit
 			}
 		}
+		c.draw = true
 	case 0xE000:
 		switch opcode & 0x00FF {
 		case 0x009E:

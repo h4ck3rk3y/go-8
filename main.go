@@ -41,36 +41,42 @@ func update(screen *ebiten.Image) error {
 	// fill screen
 	screen.Fill(color.NRGBA{0x00, 0x00, 0x00, 0xff})
 
-	chip8.Run()
+	for i := 0; i < 10; i++ {
 
-	for i := 0; i < 32; i++ {
-		for j := 0; j < 64; j++ {
-			if chip8.display[i][j] == 0x01 {
+		chip8.draw = false
+		chip8.Run()
 
-				square, _ := ebiten.NewImage(10, 10, ebiten.FilterNearest)
+		if chip8.draw {
+			for i := 0; i < 32; i++ {
+				for j := 0; j < 64; j++ {
+					if chip8.display[i][j] == 0x01 {
 
-				square.Fill(color.White)
+						square, _ := ebiten.NewImage(10, 10, ebiten.FilterNearest)
 
-				opts := &ebiten.DrawImageOptions{}
+						square.Fill(color.White)
 
-				opts.GeoM.Translate(float64(j*10), float64(i*10))
+						opts := &ebiten.DrawImageOptions{}
 
-				screen.DrawImage(square, opts)
+						opts.GeoM.Translate(float64(j*10), float64(i*10))
+
+						screen.DrawImage(square, opts)
+					}
+				}
 			}
 		}
-	}
-
-	for key, value := range keyMap {
-		if ebiten.IsKeyPressed(key) {
-			chip8.keys[value] = 0x01
-		} else {
-			chip8.keys[value] = 0x00
+		for key, value := range keyMap {
+			if ebiten.IsKeyPressed(key) {
+				chip8.keys[value] = 0x01
+			} else {
+				chip8.keys[value] = 0x00
+			}
 		}
-	}
 
-	if chip8.soundTimer > 0 {
-		audioPlayer.Play()
-		audioPlayer.Rewind()
+		if chip8.soundTimer > 0 {
+			audioPlayer.Play()
+			audioPlayer.Rewind()
+		}
+
 	}
 
 	return nil
