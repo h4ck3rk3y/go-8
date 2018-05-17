@@ -5,6 +5,8 @@ A chip-8 emulator written in Go. I am trying to learn go-lang for fun and I have
 
 You'll need the drivers required by ebiten and you can find the relevant installation instructions [here](https://github.com/hajimehoshi/ebiten/wiki/Linux).
 
+I wrote a blog post about this project which you can find [here](https://gyani.net/blog/chip-8/)
+
 ![Screen Shot](screenshots/PONG.png?raw=true)
 
 ## Test Instructions
