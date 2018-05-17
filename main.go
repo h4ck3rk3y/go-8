@@ -36,6 +36,15 @@ func setupKeys() {
 	keyMap[ebiten.KeyV] = 0x0F
 }
 
+var (
+	square *ebiten.Image
+)
+
+func init() {
+	square, _ = ebiten.NewImage(10, 10, ebiten.FilterNearest)
+	square.Fill(color.White)
+}
+
 func update(screen *ebiten.Image) error {
 
 	// fill screen
@@ -63,10 +72,6 @@ func update(screen *ebiten.Image) error {
 			for i := 0; i < 32; i++ {
 				for j := 0; j < 64; j++ {
 					if chip8.display[i][j] == 0x01 {
-
-						square, _ := ebiten.NewImage(10, 10, ebiten.FilterNearest)
-
-						square.Fill(color.White)
 
 						opts := &ebiten.DrawImageOptions{}
 
