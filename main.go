@@ -45,6 +45,16 @@ func init() {
 	square.Fill(color.White)
 }
 
+func getInput() bool {
+	for key, value := range keyMap {
+		if ebiten.IsKeyPressed(key) {
+			chip8.keys[value] = 0x01
+			return true
+		}
+	}
+	return false
+}
+
 func update(screen *ebiten.Image) error {
 
 	// fill screen
@@ -54,21 +64,17 @@ func update(screen *ebiten.Image) error {
 
 		chip8.draw = false
 		chip8.inputflag = false
+		gotInput := true
 		chip8.Run()
 
 		if chip8.inputflag {
-		InputLoop:
-			for true {
-				for key, value := range keyMap {
-					if ebiten.IsKeyPressed(key) {
-						chip8.V[chip8.inputRegister] = value
-						break InputLoop
-					}
-				}
+			gotInput = getInput()
+			if !gotInput {
+				chip8.pc = chip8.pc - 2
 			}
 		}
 
-		if chip8.draw {
+		if chip8.draw || !gotInput {
 			for i := 0; i < 32; i++ {
 				for j := 0; j < 64; j++ {
 					if chip8.display[i][j] == 0x01 {
